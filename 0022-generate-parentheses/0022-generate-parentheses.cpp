@@ -1,29 +1,29 @@
 class Solution {
 public:
-    void solve(int open, int close, vector<string>& ans, string op) {
-        if(open<0 || close<0) return;
-        if(open==0 and close==0) {
-            ans.push_back(op);
-            return;
+    bool canBeValid(string s, string locked) {
+        if(s.length() == 1) return false;
+        
+        stack<char> stack;
+        
+        for(int i=0; i<s.length(); i++) {
+            if(s[i] == '(') {
+                if(!stack.empty() && stack.top() == '(' && locked[i] == 0) {
+                    stack.pop();
+                } else {
+                    stack.push(s[i]);
+                }
+            } else {
+                if(stack.empty() && locked[i]=='0') {
+                    stack.push('(');
+                } 
+                else if(stack.top() == '(') {
+                    stack.pop();
+                } else {
+                    return false;
+                }
+            }
         }
         
-        if(open == close) {
-            string x = op + "(";
-            solve(open-1, close, ans, x);
-        } else {
-            string x1 = op + "(";
-            string x2 = op + ")";
-            solve(open-1, close, ans, x1);
-            solve(open, close-1, ans, x2);
-        }
-        return;
-        
-    }
-    
-    vector<string> generateParenthesis(int n) {
-        vector<string> ans;
-        solve(n, n, ans, "");
-        
-        return ans;
+        return stack.empty();
     }
 };
