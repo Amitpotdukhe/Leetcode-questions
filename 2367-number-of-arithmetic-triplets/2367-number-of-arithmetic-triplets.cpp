@@ -3,26 +3,14 @@ public:
     int arithmeticTriplets(vector<int>& nums, int diff) {
         int ans = 0;
         
-        for(int i=0; i<nums.size(); i++) {
-            
-            int j=i+1;
-            while(j<nums.size()) {
-                
-                int k=j+1;
-                while(k<nums.size()) {
-                    
-                    int sum1 = nums[j]-nums[i];
-                    int sum2 = nums[k]-nums[j];
-                    if(sum1 == diff and sum2 == diff) {
-                        ans++;
-                    }
-                    k++;
-                    
-                }
-                
-                j++;
+        unordered_map<int, bool> map;
+        
+        for(auto i : nums) map[i] = true;
+        
+        for(auto i : nums) {
+            if(map[diff+i] and map[i-diff]) {
+                ans++;
             }
-            
         }
         
         return ans;
