@@ -1,28 +1,36 @@
 class Solution {
 public:
-    long long calculateHrs(vector<int>&piles, long long h) {
-        long long x=0;
-        for(long long i : piles) {
-            x += ceil((long double)i/h);
-        }
-
-        return x;
-    }
-    int minEatingSpeed(vector<int>& piles, int h) {
-        long long n=piles.size(), i=1, j=0, ans=0;
-        for(long long it : piles) {j=max(j, it);}
-
-        while(i<=j) {
-            long long mid = i+(j-i)/2;
-            long long totalHours = calculateHrs(piles, mid);
-            if(totalHours <= h) {
-                ans = mid;
-                j = mid-1;
-            }  else {
-                i = mid + 1;
+    bool solve(long long speed, vector<int>& piles, int h) {
+        long long hours=0, curr=0;
+        for(auto it : piles) {
+            if(speed==0) return false;
+            if(it%speed==0) {
+                hours += it/speed;
+            } else {
+                hours += (it/speed)+1;
             }
         }
-
+        if(hours>h) return false;
+        return true;
+    }
+    int minEatingSpeed(vector<int>& piles, int h) {
+        long long i=1, j=*max_element(begin(piles), end(piles));
+        long long ans=INT_MAX;
+        
+        while(i<=j) {
+            long long speed = i+(j-i)/2;
+            
+            bool canEat = solve(speed, piles, h);
+            cout<<speed<<"-"<<canEat<<" ";
+            if(canEat) {
+                
+                ans=min(ans, speed);
+                j=speed-1;
+            } else {
+                i=speed+1;
+            }
+        }
+        
         return ans;
     }
 };
